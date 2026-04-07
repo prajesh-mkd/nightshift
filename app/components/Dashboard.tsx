@@ -265,27 +265,47 @@ export default function Dashboard({ user, connections, liveData, tokenSource }: 
             
             {connections.google && (
               <>
-                <button className={`${styles["command-btn"]} ${styles["command-btn--safe"]}`} onClick={runSafeGoogleTask} disabled={isExecuting}>
-                  <span className={styles["command-title"]}>▶ Read Latest Email</span>
-                  <span className={styles["command-scope"]}>Required: gmail.readonly</span>
-                </button>
-                <button className={`${styles["command-btn"]} ${styles["command-btn--rogue"]}`} onClick={runRogueGoogleTask} disabled={isExecuting}>
-                  <span className={styles["command-title"]}>▶ Archive Latest Email</span>
-                  <span className={styles["command-scope"]}>Required: gmail.modify</span>
-                </button>
+                <div className={`${styles["command-card"]} ${styles["command-card--safe"]}`}>
+                  <div className={styles["command-info"]}>
+                    <span className={styles["command-title"]}>Read Latest Email</span>
+                    <span className={styles["command-scope"]}>Required: gmail.readonly</span>
+                  </div>
+                  <button className={`${styles["execute-btn"]} ${styles["execute-btn--safe"]}`} onClick={runSafeGoogleTask} disabled={isExecuting}>
+                    Run Safe Task
+                  </button>
+                </div>
+                <div className={`${styles["command-card"]} ${styles["command-card--rogue"]}`}>
+                  <div className={styles["command-info"]}>
+                    <span className={styles["command-title"]}>Archive Latest Email</span>
+                    <span className={styles["command-scope"]}>Required: gmail.modify</span>
+                  </div>
+                  <button className={`${styles["execute-btn"]} ${styles["execute-btn--rogue"]}`} onClick={runRogueGoogleTask} disabled={isExecuting}>
+                    Run Rogue Task
+                  </button>
+                </div>
               </>
             )}
 
             {connections.github && (
               <>
-                <button className={`${styles["command-btn"]} ${styles["command-btn--safe"]}`} onClick={runSafeGitHubTask} disabled={isExecuting}>
-                  <span className={styles["command-title"]}>▶ Audit Open PRs</span>
-                  <span className={styles["command-scope"]}>Required: repo:read</span>
-                </button>
-                <button className={`${styles["command-btn"]} ${styles["command-btn--rogue"]}`} onClick={runRogueGitHubTask} disabled={isExecuting}>
-                  <span className={styles["command-title"]}>▶ Auto-Merge Open PRs</span>
-                  <span className={styles["command-scope"]}>Required: repo</span>
-                </button>
+                <div className={`${styles["command-card"]} ${styles["command-card--safe"]}`}>
+                  <div className={styles["command-info"]}>
+                    <span className={styles["command-title"]}>Audit Open PRs</span>
+                    <span className={styles["command-scope"]}>Required: repo:read</span>
+                  </div>
+                  <button className={`${styles["execute-btn"]} ${styles["execute-btn--safe"]}`} onClick={runSafeGitHubTask} disabled={isExecuting}>
+                    Run Safe Task
+                  </button>
+                </div>
+                <div className={`${styles["command-card"]} ${styles["command-card--rogue"]}`}>
+                  <div className={styles["command-info"]}>
+                    <span className={styles["command-title"]}>Auto-Merge Open PRs</span>
+                    <span className={styles["command-scope"]}>Required: repo</span>
+                  </div>
+                  <button className={`${styles["execute-btn"]} ${styles["execute-btn--rogue"]}`} onClick={runRogueGitHubTask} disabled={isExecuting}>
+                    Run Rogue Task
+                  </button>
+                </div>
               </>
             )}
           </div>

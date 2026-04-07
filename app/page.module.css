@@ -866,29 +866,84 @@
   margin-bottom: var(--space-2xl);
 }
 
-.command-btn {
-  background: linear-gradient(180deg, var(--bg-card) 0%, rgba(20, 20, 25, 0.7) 100%);
+.command-card {
+  background: var(--bg-card);
   border: 1px solid var(--border-default);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding: var(--space-lg);
   border-radius: var(--radius-lg);
-  cursor: pointer;
-  text-align: left;
-  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.command-card--safe::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--status-success);
+}
+
+.command-card--rogue::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--status-error);
+}
+
+.command-info {
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-.command-btn:hover:not(:disabled) {
-  background: linear-gradient(180deg, var(--bg-card-hover) 0%, rgba(30, 30, 35, 0.8) 100%);
-  border-color: var(--border-hover);
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+.execute-btn {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.execute-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.execute-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.execute-btn--safe {
+  background: #238636;
+  color: white;
+}
+
+.execute-btn--safe:hover:not(:disabled) {
+  background: #2ea043;
+}
+
+.execute-btn--rogue {
+  background: #da3633;
+  color: white;
+}
+
+.execute-btn--rogue:hover:not(:disabled) {
+  background: #f85149;
 }
 
 .command-btn:disabled {
