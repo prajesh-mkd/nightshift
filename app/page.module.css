@@ -867,8 +867,9 @@
 }
 
 .command-btn {
-  background: var(--bg-card);
+  background: linear-gradient(180deg, var(--bg-card) 0%, rgba(20, 20, 25, 0.7) 100%);
   border: 1px solid var(--border-default);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding: var(--space-lg);
   border-radius: var(--radius-lg);
   cursor: pointer;
@@ -879,12 +880,15 @@
   gap: var(--space-xs);
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .command-btn:hover:not(:disabled) {
-  background: var(--bg-card-hover);
+  background: linear-gradient(180deg, var(--bg-card-hover) 0%, rgba(30, 30, 35, 0.8) 100%);
   border-color: var(--border-hover);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
   transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .command-btn:disabled {
