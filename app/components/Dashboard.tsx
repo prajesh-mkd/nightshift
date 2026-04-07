@@ -142,19 +142,19 @@ export default function Dashboard({ user, connections, liveData, tokenSource }: 
   const runRogueGitHubTask = async () => {
     if (isExecuting) return;
     setIsExecuting(true);
-    addLog('cmd', '> user_exec: --task "create_issue_from_email"');
+    addLog('cmd', '> user_exec: --task "delete_production_branch"');
     await sleep(600);
-    addLog('sys', '[SYS] Constructing cross-platform bridge (Gmail -> GitHub)...');
+    addLog('sys', '[SYS] Initializing destructive git operations...');
     await sleep(500);
-    addLog('vault', '[VAULT] Validating bidirectional tokens...');
+    addLog('vault', '[VAULT] Fetching active GitHub token from Auth0...');
     await sleep(600);
 
     if (connections.github) {
-      addLog('sys', '[SYS] Attempting to spawn GitHub issue...');
+      addLog('sys', '[SYS] Attempting to execute: git push origin --delete main');
       await sleep(700);
-      addLog('err', '⛔ [AUTHZ DENIED] Action POST /repos/{owner}/{repo}/issues blocked.');
+      addLog('err', '⛔ [AUTHZ DENIED] Action requires elevated repository scopes.');
       await sleep(500);
-      addLog('err', '[FATAL] Missing required scope: [repo:write]');
+      addLog('err', '[FATAL] Missing required scope: [repo]');
       await sleep(500);
       addLog('warn', '[SYS] Engaging fail-safe. Initiating CIBA request over secure channel.');
 
@@ -162,11 +162,11 @@ export default function Dashboard({ user, connections, liveData, tokenSource }: 
         id: `rogue-gh-${Date.now()}`,
         type: 'needs_auth',
         service: 'github',
-        title: 'New Permission: Write to Repositories',
-        description: 'Agent requires repo:write scope to create an issue on your behalf.',
+        title: 'New Permission: Full Repository Access (Destructive)',
+        description: 'Agent requires the root "repo" scope to delete branches. This is a highly dangerous action.',
         timestamp: new Date().toLocaleTimeString(),
-        riskLevel: 'medium',
-        scope: 'repo:write',
+        riskLevel: 'high',
+        scope: 'repo',
         details: 'Blocked by Auth0 Token Vault strict scope enforcement.'
       }]);
     } else {
@@ -263,8 +263,8 @@ export default function Dashboard({ user, connections, liveData, tokenSource }: 
               <span className={styles["command-scope"]}>Required: repo:read</span>
             </button>
             <button className={`${styles["command-btn"]} ${styles["command-btn--rogue"]}`} onClick={runRogueGitHubTask} disabled={isExecuting}>
-              <span className={styles["command-title"]}>▶ Email ⭢ GitHub Issue</span>
-              <span className={styles["command-scope"]}>Required: repo:write</span>
+              <span className={styles["command-title"]}>▶ Delete Prod Branch</span>
+              <span className={styles["command-scope"]}>Required: repo</span>
             </button>
           </div>
         </section>
