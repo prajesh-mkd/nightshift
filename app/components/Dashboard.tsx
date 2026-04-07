@@ -177,16 +177,23 @@ export default function Dashboard({ user, connections, liveData, tokenSource }: 
     setIsExecuting(false);
   };
 
-  const removePending = (id: string, action: 'approve' | 'deny') => {
+  const removePending = async (id: string, action: 'approve' | 'deny') => {
+    const req = pendingRequests.find(r => r.id === id);
     addLog('sys', `> user_auth: --interaction "${action}" --target "${id}"`);
-    setPendingRequests(prev => prev.filter(req => req.id !== id));
-    setTimeout(() => {
-      if (action === 'approve') {
-        addLog('authz', `[AUTHZ] Step-Up Authentication successful. Privilege escalated.`);
-      } else {
-        addLog('warn', `[SYS] Authorization denied by user. Task permanently aborted.`);
-      }
-    }, 500);
+    setPendingRequests(prev => prev.filter(r => r.id !== id));
+    
+    await sleep(500);
+    if (action === 'approve') {
+      addLog('authz', `[AUTHZ] Step-Up Authentication successful. Privilege escalated.`);
+      await sleep(600);
+      addLog('sys', `[SYS] Re-initiating halted task for service: ${req?.service}`);
+      await sleep(800);
+      addLog('vault', `[VAULT] Token refreshed via Auth0. New scope granted: [${req?.scope}]`);
+      await sleep(700);
+      addLog('sys', `[SUCCESS] Authorized action completed successfully.`);
+    } else {
+      addLog('warn', `[SYS] Authorization denied by user. Task permanently aborted.`);
+    }
   };
 
   return (
