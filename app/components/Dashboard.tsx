@@ -203,7 +203,7 @@ export default function Dashboard({ user, connections, liveData, tokenSource }: 
           <div className={styles.header__brand}>
             <div className={styles.header__logo}>🛡️</div>
             <div>
-              <div className={styles.header__title}>Zero-Trust AI Sandbox</div>
+              <div className={styles.header__title}>Zero-Trust AI Firewall</div>
               <div className={styles.header__subtitle}>
                 Powered by Auth0 Token Vault
               </div>
