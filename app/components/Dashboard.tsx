@@ -142,15 +142,15 @@ export default function Dashboard({ user, connections, liveData, tokenSource }: 
   const runRogueGitHubTask = async () => {
     if (isExecuting) return;
     setIsExecuting(true);
-    addLog('cmd', '> user_exec: --task "delete_production_branch"');
+    addLog('cmd', '> user_exec: --task "auto_merge_prs"');
     await sleep(600);
-    addLog('sys', '[SYS] Initializing destructive git operations...');
+    addLog('sys', '[SYS] Initializing batch merge operations...');
     await sleep(500);
     addLog('vault', '[VAULT] Fetching active GitHub token from Auth0...');
     await sleep(600);
 
     if (connections.github) {
-      addLog('sys', '[SYS] Attempting to execute: git push origin --delete main');
+      addLog('sys', '[SYS] Attempting to execute: PUT /repos/{owner}/{repo}/pulls/{pull_number}/merge');
       await sleep(700);
       addLog('err', '⛔ [AUTHZ DENIED] Action requires elevated repository scopes.');
       await sleep(500);
@@ -162,15 +162,15 @@ export default function Dashboard({ user, connections, liveData, tokenSource }: 
         id: `rogue-gh-${Date.now()}`,
         type: 'needs_auth',
         service: 'github',
-        title: 'New Permission: Full Repository Access (Destructive)',
-        description: 'Agent requires the root "repo" scope to delete branches. This is a highly dangerous action.',
+        title: 'Elevate privileges to merge pull requests',
+        description: 'The agent attempted to automatically merge open PRs but lacks required scopes.',
         timestamp: new Date().toLocaleTimeString(),
         riskLevel: 'high',
         scope: 'repo',
         details: 'Blocked by Auth0 Token Vault strict scope enforcement.'
       }]);
     } else {
-      addLog('err', '[ERROR] Cross-platform bridge failed: Missing GitHub connection.');
+      addLog('err', '[ERROR] GitHub connection not established.');
     }
 
     addLog('sys', 'Task execution terminated prematurely.');
@@ -276,7 +276,7 @@ export default function Dashboard({ user, connections, liveData, tokenSource }: 
                   <span className={styles["command-scope"]}>Required: repo:read</span>
                 </button>
                 <button className={`${styles["command-btn"]} ${styles["command-btn--rogue"]}`} onClick={runRogueGitHubTask} disabled={isExecuting}>
-                  <span className={styles["command-title"]}>▶ Delete Prod Branch</span>
+                  <span className={styles["command-title"]}>▶ Auto-Merge Open PRs</span>
                   <span className={styles["command-scope"]}>Required: repo</span>
                 </button>
               </>
