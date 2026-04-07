@@ -250,22 +250,37 @@ export default function Dashboard({ user, connections, liveData, tokenSource }: 
           </p>
           
           <div className={styles["command-grid"]}>
-            <button className={`${styles["command-btn"]} ${styles["command-btn--safe"]}`} onClick={runSafeGoogleTask} disabled={isExecuting}>
-              <span className={styles["command-title"]}>▶ Read Latest Email</span>
-              <span className={styles["command-scope"]}>Required: gmail.readonly</span>
-            </button>
-            <button className={`${styles["command-btn"]} ${styles["command-btn--rogue"]}`} onClick={runRogueGoogleTask} disabled={isExecuting}>
-              <span className={styles["command-title"]}>▶ Archive Promotions</span>
-              <span className={styles["command-scope"]}>Required: gmail.modify</span>
-            </button>
-            <button className={`${styles["command-btn"]} ${styles["command-btn--safe"]}`} onClick={runSafeGitHubTask} disabled={isExecuting}>
-              <span className={styles["command-title"]}>▶ Audit Open PRs</span>
-              <span className={styles["command-scope"]}>Required: repo:read</span>
-            </button>
-            <button className={`${styles["command-btn"]} ${styles["command-btn--rogue"]}`} onClick={runRogueGitHubTask} disabled={isExecuting}>
-              <span className={styles["command-title"]}>▶ Delete Prod Branch</span>
-              <span className={styles["command-scope"]}>Required: repo</span>
-            </button>
+            {!connections.google && !connections.github && (
+              <p style={{ color: "var(--text-muted)", gridColumn: "1 / -1", padding: "var(--space-lg) 0" }}>
+                Please connect an identity in the section above to simulate tasks.
+              </p>
+            )}
+            
+            {connections.google && (
+              <>
+                <button className={`${styles["command-btn"]} ${styles["command-btn--safe"]}`} onClick={runSafeGoogleTask} disabled={isExecuting}>
+                  <span className={styles["command-title"]}>▶ Read Latest Email</span>
+                  <span className={styles["command-scope"]}>Required: gmail.readonly</span>
+                </button>
+                <button className={`${styles["command-btn"]} ${styles["command-btn--rogue"]}`} onClick={runRogueGoogleTask} disabled={isExecuting}>
+                  <span className={styles["command-title"]}>▶ Archive Promotions</span>
+                  <span className={styles["command-scope"]}>Required: gmail.modify</span>
+                </button>
+              </>
+            )}
+
+            {connections.github && (
+              <>
+                <button className={`${styles["command-btn"]} ${styles["command-btn--safe"]}`} onClick={runSafeGitHubTask} disabled={isExecuting}>
+                  <span className={styles["command-title"]}>▶ Audit Open PRs</span>
+                  <span className={styles["command-scope"]}>Required: repo:read</span>
+                </button>
+                <button className={`${styles["command-btn"]} ${styles["command-btn--rogue"]}`} onClick={runRogueGitHubTask} disabled={isExecuting}>
+                  <span className={styles["command-title"]}>▶ Delete Prod Branch</span>
+                  <span className={styles["command-scope"]}>Required: repo</span>
+                </button>
+              </>
+            )}
           </div>
         </section>
 
