@@ -15,7 +15,7 @@ export default function LoginPage() {
         <h1 className={styles["login-card__title"]}>NightShift</h1>
         <p className={styles["login-card__subtitle"]}>Zero-Trust AI Firewall</p>
         <p className={styles["login-card__description"]}>
-          AI agents shouldn't have the keys to your digital life. NightShift uses Auth0 Token Vault to strictly enforce least-privilege access, block rogue actions, and securely escalate privileges.
+          An interactive simulator demonstrating secure AI agent delegation. NightShift uses Auth0 Token Vault to strictly enforce least-privilege access, block rogue actions, and securely escalate privileges.
         </p>
         <a href="/auth/login" className={styles["login-card__button"]}>
           <span className={styles["login-card__button-icon"]}>🔐</span>
