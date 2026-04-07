@@ -115,13 +115,16 @@ export async function fetchGmailData(): Promise<EmailSummary | null> {
   if (!token) return null;
 
   try {
-    // Get unread email count
-    const unreadRes = await fetch(
-      "https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=1&q=is:unread",
+    // Get EXACT inbox counts from the Labels API (not the inaccurate resultSizeEstimate)
+    const labelRes = await fetch(
+      "https://gmail.googleapis.com/gmail/v1/users/me/labels/INBOX",
       { headers: { Authorization: `Bearer ${token}` } }
     );
-    const unreadData = await unreadRes.json();
-    if (unreadData.error) return null;
+    const labelData = await labelRes.json();
+    if (labelData.error) return null;
+
+    const totalMessages = labelData.messagesTotal || 0;
+    const unreadCount = labelData.messagesUnread || 0;
 
     // Get recent emails (last 20)
     const messagesRes = await fetch(
@@ -132,8 +135,6 @@ export async function fetchGmailData(): Promise<EmailSummary | null> {
     if (messagesData.error) return null;
 
     const messages = messagesData.messages || [];
-    const totalMessages = messagesData.resultSizeEstimate || 0;
-    const unreadCount = unreadData.resultSizeEstimate || 0;
 
     // Fetch details for up to 8 recent emails
     const recentEmails = [];
