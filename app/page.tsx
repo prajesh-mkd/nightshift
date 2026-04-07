@@ -12,12 +12,10 @@ export default async function Home() {
   }
 
   const user = session.user;
-
-  // Detect which provider the user logged in with.
-  // Note: For the hackathon demo video, we simulate that the Auth0 Token Vault
-  // has successfully linked both identities to the core user profile.
-  const isGoogleUser = true;
-  const isGitHubUser = true;
+  
+  // Detect which provider the user logged in with
+  const isGoogleUser = user.sub?.startsWith("google-oauth2|") || false;
+  const isGitHubUser = user.sub?.startsWith("github|") || false;
 
   // Fetch real data from connected services via Token Vault
   // We still fetch some real data just to prove Token Vault works
