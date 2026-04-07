@@ -716,6 +716,7 @@
 .login-card__button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 30px rgba(124, 91, 245, 0.5);
+  color: white;
 }
 
 .login-card__button-icon {
