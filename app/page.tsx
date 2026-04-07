@@ -1,5 +1,5 @@
 import { auth0 } from "./lib/auth0";
-import { fetchGmailData, fetchCalendarData, fetchGitHubData, generateAgentActions, tokenSource } from "./lib/services";
+import { fetchGmailData, fetchCalendarData, fetchGitHubData, tokenSource } from "./lib/services";
 import Dashboard from "./components/Dashboard";
 import LoginPage from "./components/LoginPage";
 
@@ -18,14 +18,12 @@ export default async function Home() {
   const isGitHubUser = user.sub?.startsWith("github|") || false;
 
   // Fetch real data from connected services via Token Vault
+  // We still fetch some real data just to prove Token Vault works
   const [gmailData, calendarData, gitHubData] = await Promise.all([
     isGoogleUser ? fetchGmailData().catch(() => null) : null,
     isGoogleUser ? fetchCalendarData().catch(() => null) : null,
     isGitHubUser ? fetchGitHubData().catch(() => null) : null,
   ]);
-
-  // Generate dynamic agent actions from real data
-  const agentActions = generateAgentActions(gmailData, calendarData, gitHubData);
 
   return (
     <Dashboard
@@ -44,7 +42,6 @@ export default async function Home() {
         calendar: calendarData,
         github: gitHubData,
       }}
-      agentActions={agentActions}
       tokenSource={tokenSource}
     />
   );
