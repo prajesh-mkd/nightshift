@@ -129,7 +129,7 @@ export default function Dashboard({ user, connections, liveData, agentActions, t
               {connections.google ? (
                 <span className={styles["connection-chip__badge"]}>✓ Connected</span>
               ) : (
-                <a href="/auth/connect?connection=google-oauth2" className={styles["connection-chip__link"]}>Connect</a>
+                <a href="/auth/login?connection=google-oauth2" className={styles["connection-chip__link"]}>Connect</a>
               )}
             </div>
             <div className={`${styles["connection-chip"]} ${connections.github ? styles["connection-chip--active"] : ""}`}>
