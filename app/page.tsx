@@ -1,5 +1,5 @@
 import { auth0 } from "./lib/auth0";
-import { fetchGmailData, fetchCalendarData, fetchGitHubData } from "./lib/services";
+import { fetchGmailData, fetchCalendarData, fetchGitHubData, generateAgentActions, tokenSource } from "./lib/services";
 import Dashboard from "./components/Dashboard";
 import LoginPage from "./components/LoginPage";
 
@@ -24,6 +24,9 @@ export default async function Home() {
     isGitHubUser ? fetchGitHubData().catch(() => null) : null,
   ]);
 
+  // Generate dynamic agent actions from real data
+  const agentActions = generateAgentActions(gmailData, calendarData, gitHubData);
+
   return (
     <Dashboard
       user={{
@@ -41,6 +44,8 @@ export default async function Home() {
         calendar: calendarData,
         github: gitHubData,
       }}
+      agentActions={agentActions}
+      tokenSource={tokenSource}
     />
   );
 }

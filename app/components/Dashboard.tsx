@@ -3,7 +3,6 @@
 import { useState } from "react";
 import styles from "../page.module.css";
 import {
-  mockActions,
   getServiceIcon,
   type AgentAction,
 } from "../lib/mock-data";
@@ -25,19 +24,21 @@ interface DashboardProps {
     calendar: CalendarSummary | null;
     github: GitHubSummary | null;
   };
+  agentActions: AgentAction[];
+  tokenSource: "token_vault" | "management_api" | "none";
 }
 
-export default function Dashboard({ user, connections, liveData }: DashboardProps) {
+export default function Dashboard({ user, connections, liveData, agentActions, tokenSource }: DashboardProps) {
   const [modalAction, setModalAction] = useState<AgentAction | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [approvedIds, setApprovedIds] = useState<Set<string>>(new Set());
   const [deniedIds, setDeniedIds] = useState<Set<string>>(new Set());
 
-  // Build actions from real data + mock pending/auth actions
-  const pendingActions = mockActions.filter(
+  // Filter dynamic actions by type
+  const pendingActions = agentActions.filter(
     (a) => a.type === "pending_approval" && !approvedIds.has(a.id) && !deniedIds.has(a.id)
   );
-  const authActions = mockActions.filter(
+  const authActions = agentActions.filter(
     (a) => a.type === "needs_auth" && !approvedIds.has(a.id) && !deniedIds.has(a.id)
   );
 
@@ -406,9 +407,9 @@ export default function Dashboard({ user, connections, liveData }: DashboardProp
               </span>
             </h2>
             <div className={`${styles["action-list"]} stagger`}>
-              {mockActions
-                .filter((a) => approvedIds.has(a.id))
-                .map((action) => (
+              {agentActions
+                .filter((a: AgentAction) => approvedIds.has(a.id))
+                .map((action: AgentAction) => (
                   <ActionCard
                     key={action.id}
                     action={action}
