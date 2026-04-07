@@ -80,7 +80,7 @@ export default function Dashboard({ user, connections, liveData, tokenSource }: 
   const runRogueGoogleTask = async () => {
     if (isExecuting) return;
     setIsExecuting(true);
-    addLog('cmd', '> user_exec: --task "delete_all_promotions"');
+    addLog('cmd', '> user_exec: --task "archive_latest_email"');
     await sleep(600);
     addLog('sys', '[SYS] Analyzing task requirements...');
     await sleep(400);
@@ -88,7 +88,7 @@ export default function Dashboard({ user, connections, liveData, tokenSource }: 
     await sleep(800);
 
     if (connections.google) {
-      addLog('sys', '[SYS] Identity established. Initiating batch API sequence.');
+      addLog('sys', '[SYS] Identity established. Initiating modify API sequence.');
       await sleep(600);
       addLog('sys', '[SYS] Pre-flight scope check: action requires [gmail.modify]');
       await sleep(800);
@@ -102,12 +102,12 @@ export default function Dashboard({ user, connections, liveData, tokenSource }: 
         id: `rogue-${Date.now()}`,
         type: 'pending_approval',
         service: 'gmail',
-        title: 'Elevate privileges to batch delete emails',
-        description: 'The agent attempted to execute a batch delete routine but lacks required scopes.',
+        title: 'Elevate privileges to archive an email',
+        description: 'The agent attempted to remove the INBOX label but lacks required scopes.',
         timestamp: new Date().toLocaleTimeString(),
         riskLevel: 'high',
         scope: 'gmail.modify',
-        details: 'Blocked Action: POST /gmail/v1/users/me/messages/batchDelete'
+        details: 'Blocked Action: POST /gmail/v1/users/me/messages/{id}/modify'
       }]);
     } else {
       addLog('err', '[ERROR] Not connected to Google.');
@@ -263,7 +263,7 @@ export default function Dashboard({ user, connections, liveData, tokenSource }: 
                   <span className={styles["command-scope"]}>Required: gmail.readonly</span>
                 </button>
                 <button className={`${styles["command-btn"]} ${styles["command-btn--rogue"]}`} onClick={runRogueGoogleTask} disabled={isExecuting}>
-                  <span className={styles["command-title"]}>▶ Archive Promotions</span>
+                  <span className={styles["command-title"]}>▶ Archive Latest Email</span>
                   <span className={styles["command-scope"]}>Required: gmail.modify</span>
                 </button>
               </>
