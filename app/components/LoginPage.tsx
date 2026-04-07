@@ -11,12 +11,11 @@ export default function LoginPage() {
         <div className={styles["login-page__orb3"]} />
       </div>
       <div className={styles["login-card"]}>
-        <div className={styles["login-card__logo"]}>🌙</div>
+        <div className={styles["login-card__logo"]}>🛡️</div>
         <h1 className={styles["login-card__title"]}>NightShift</h1>
-        <p className={styles["login-card__subtitle"]}>AI That Works While You Sleep</p>
+        <p className={styles["login-card__subtitle"]}>Zero-Trust AI Firewall</p>
         <p className={styles["login-card__description"]}>
-          Your autonomous AI agent manages your emails, calendar, and code reviews overnight.
-          Wake up to everything done — securely powered by Auth0.
+          AI agents shouldn't have the keys to your digital life. NightShift uses Auth0 Token Vault to strictly enforce least-privilege access, block rogue actions, and securely escalate privileges.
         </p>
         <a href="/auth/login" className={styles["login-card__button"]}>
           <span className={styles["login-card__button-icon"]}>🔐</span>
