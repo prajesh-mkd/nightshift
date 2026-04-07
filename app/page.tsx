@@ -1,66 +1,46 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import { auth0 } from "./lib/auth0";
+import { fetchGmailData, fetchCalendarData, fetchGitHubData } from "./lib/services";
+import Dashboard from "./components/Dashboard";
+import LoginPage from "./components/LoginPage";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth0.getSession();
+
+  // If not authenticated, show login page
+  if (!session) {
+    return <LoginPage />;
+  }
+
+  const user = session.user;
+
+  // Detect which provider the user logged in with
+  const isGoogleUser = user.sub?.startsWith("google-oauth2|") || false;
+  const isGitHubUser = user.sub?.startsWith("github|") || false;
+
+  // Fetch real data from connected services via Token Vault
+  const [gmailData, calendarData, gitHubData] = await Promise.all([
+    isGoogleUser ? fetchGmailData().catch(() => null) : null,
+    isGoogleUser ? fetchCalendarData().catch(() => null) : null,
+    isGitHubUser ? fetchGitHubData().catch(() => null) : null,
+  ]);
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <Dashboard
+      user={{
+        name: user.name as string | undefined,
+        email: user.email as string | undefined,
+        picture: user.picture as string | undefined,
+        sub: user.sub as string | undefined,
+      }}
+      connections={{
+        google: isGoogleUser,
+        github: isGitHubUser,
+      }}
+      liveData={{
+        gmail: gmailData,
+        calendar: calendarData,
+        github: gitHubData,
+      }}
+    />
   );
 }
